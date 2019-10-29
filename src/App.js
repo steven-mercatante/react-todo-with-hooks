@@ -8,17 +8,17 @@ function TodoForm({ createTodo }) {
     setTask(event.target.value);
   }
 
-  function handleClick(event) {
+  function handleSubmit(event) {
     event.preventDefault();
     createTodo(task);
     setTask("");
   }
 
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <label htmlFor="task">Task</label>
       <input type="text" name="task" value={task} onChange={handleChange} />
-      <button onClick={handleClick}>Add</button>
+      <button>Add</button>
     </form>
   );
 }
@@ -79,7 +79,8 @@ function App() {
     const id = todos.length > 0 ? todos[todos.length - 1].id + 1 : 1;
     const newTodo = {
       id,
-      task: task
+      task: task,
+      isComplete: false
     };
 
     setTodos(todos.concat(newTodo));
