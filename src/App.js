@@ -10,6 +10,7 @@ function TodoForm({ createTodo }) {
 
   function handleSubmit(event) {
     event.preventDefault();
+    if (task.trim() === "") return;
     createTodo(task);
     setTask("");
   }
@@ -17,17 +18,20 @@ function TodoForm({ createTodo }) {
   return (
     <form onSubmit={handleSubmit}>
       <label htmlFor="task">Task</label>
-      <input type="text" name="task" value={task} onChange={handleChange} />
+      <input
+        type="text"
+        name="task"
+        value={task}
+        onChange={handleChange}
+        autoFocus
+      />
       <button>Add</button>
     </form>
   );
 }
 
 function TodoItem({ id, task, isComplete, toggleTodo }) {
-  const [_isComplete, setIsComplete] = useState(isComplete);
-
-  function handleChange(event) {
-    setIsComplete(event.target.checked);
+  function handleChange(_) {
     toggleTodo(id);
   }
 
@@ -38,7 +42,7 @@ function TodoItem({ id, task, isComplete, toggleTodo }) {
         <input
           type="checkbox"
           name="isComplete"
-          checked={_isComplete}
+          checked={isComplete}
           onChange={handleChange}
         />
       </label>
@@ -63,9 +67,9 @@ function App() {
 
   let visibleTodos;
   if (showCompleted) {
-    visibleTodos = [...todos];
+    visibleTodos = [...todos].reverse();
   } else {
-    visibleTodos = todos.filter(todo => !todo.isComplete);
+    visibleTodos = todos.filter(todo => !todo.isComplete).reverse();
   }
 
   const nbCompleted = todos.reduce((acc, todo) => {
@@ -115,7 +119,7 @@ function App() {
           />
         </label>
         <ul>
-          {visibleTodos.reverse().map(todo => (
+          {visibleTodos.map(todo => (
             <TodoItem
               key={todo.id}
               id={todo.id}
